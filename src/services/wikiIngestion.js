@@ -16,8 +16,67 @@ const SKIP_RE = [
   /^Category:/,
 ];
 
+// Citation infrastructure: academic databases, bibliographic identifiers, and
+// publisher/indexing services that appear as outlinks via Wikipedia's citation
+// templates. These are logistical nodes, not intellectual concepts.
+const CITATION_ACADEMIC_INFRA = new Set([
+  "Semantic Scholar",
+  "Google Scholar",
+  "JSTOR",
+  "OCLC",
+  "WorldCat",
+  "PubMed",
+  "PubMed Central",
+  "arXiv",
+  "DOI",
+  "Digital object identifier",
+  "ISBN",
+  "ISSN",
+  "LCCN",
+  "CrossRef",
+  "Scopus",
+  "Web of Science",
+  "ProQuest",
+  "EBSCOhost",
+  "ResearchGate",
+  "PhilPapers",
+  "SSRN",
+  "Academia.edu",
+  "Wayback Machine",
+  "Internet Archive",
+  "Project MUSE",
+  "HathiTrust",
+  "OpenLibrary",
+  "Bibliothèque nationale de France",
+  "Library of Congress",
+  "British Library",
+  "Doctoral advisor",
+  "Bachelor's degree",
+  "Master's degree",
+  "Undergraduate degree",
+  "Graduate degree",
+  "Postgraduate education",
+  "Postgraduate degree",
+  "Master of Business Administration",
+  "Bachelor of Arts",
+  "Bachelor of Science",
+  "Master of Arts",
+  "Master of Science",
+  "Doctor of Philosophy",
+  "Doctor of Medicine",
+  "Doctor of Education",
+  "Doctor of Engineering",
+]);
+
+const CITATION_INFRA_LOWER = new Set(
+  [...CITATION_ACADEMIC_INFRA].map((t) => t.toLowerCase())
+);
+
 function isRelevant(title) {
-  return !SKIP_RE.some((re) => re.test(title));
+  return (
+    !SKIP_RE.some((re) => re.test(title)) &&
+    !CITATION_INFRA_LOWER.has(title.toLowerCase())
+  );
 }
 
 async function wikiGet(params) {
